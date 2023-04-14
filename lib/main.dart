@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:credix/homepage.dart';
+import 'package:credix/Pages/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,10 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Credix',
-      home: HomePage(),
+      home: Container(),
     );
   }
 }
