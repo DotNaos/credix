@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "198559573731",
+    "firebase_url": "https://credix-be37c-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "credix-be37c",
+    "storage_bucket": "credix-be37c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198559573731:android:855806a36934333e0d07d6",
+        "android_client_info": {
+          "package_name": "com.example.credix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "198559573731-74r0dgh003oh50ad1umn6jice24uvcto.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZLuM3KUx1ua28ncfJAEj-LnbFk6sUi3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "198559573731-74r0dgh003oh50ad1umn6jice24uvcto.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

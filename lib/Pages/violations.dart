@@ -16,3 +16,22 @@
  */
 
 import 'package:flutter/material.dart';
+
+class ViolationListPage extends StatefulWidget {
+  const ViolationListPage({super.key});
+
+  @override
+  _ViolationListPageState createState() => _ViolationListPageState();
+}
+
+class _ViolationListPageState extends State<ViolationListPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text('Violation List'),
+      ],
+    );
+  }
+}

@@ -10,3 +10,24 @@
  * if a task is not completed in a certain time, the task will be marked as failed
  * and the user will lose points
  */
+
+import 'package:flutter/material.dart';
+
+class TaskListPage extends StatefulWidget {
+  const TaskListPage({super.key});
+
+  @override
+  _TaskListPageState createState() => _TaskListPageState();
+}
+
+class _TaskListPageState extends State<TaskListPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Text('Task List'),
+      ],
+    );
+  }
+}
