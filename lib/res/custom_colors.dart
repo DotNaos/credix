@@ -5,8 +5,8 @@ class CustomColors {
   static const Color background = Color(0xff000000);
   static const Color onBackground = Color(0xff000000);
 
-  // static const Color primary = Color(0xFF444140);
-  static const Color primary = Color(0xff000000);
+  static const Color primary = Color(0xAA222222);
+  // static const Color primary = Color(0xff000000);
   static const Color onPrimary = Color(0xFF140d8f);
 
   static const Color secondary = Color(0xFFE54B4B);

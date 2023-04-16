@@ -16,6 +16,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:credix/components/listcomponent.dart';
+import 'package:credix/Components/headercomponent.dart';
+import 'package:credix/res/TextStyles.dart';
 
 class ViolationListPage extends StatefulWidget {
   const ViolationListPage({super.key});
@@ -29,8 +32,22 @@ class _ViolationListPageState extends State<ViolationListPage> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('Violation List'),
+      children: [
+        ListComponent(
+          header: HeaderComponent(
+            headers: [
+              Text(
+                  '${DateTime.now().day}:${DateTime.now().month}:${DateTime.now().year}',
+                  style: TextStyles.header()),
+              Text('Violation', style: TextStyles.header()),
+              Text(
+                '${(10 + (100 - 10) * 0.5).floor()}',
+                style: TextStyles.header(color: Colors.red),
+              ),
+            ],
+          ),
+          details: Text('Violation details', style: TextStyles.header()),
+        )
       ],
     );
   }
