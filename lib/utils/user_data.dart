@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class UserData {
   // random 16bit id
   static int id = 0x7fff & (DateTime.now().millisecondsSinceEpoch >> 16);
@@ -13,27 +15,72 @@ class UserData {
   static int violations = 0;
   static int goodBehaviors = 0;
 
-  static void generateRandomData() {
+  static int generateRandomData() {
     id = 0x7fff & (DateTime.now().millisecondsSinceEpoch >> 16);
     name = 'John Doe';
-    points = 600 + (DateTime.now().millisecondsSinceEpoch % 700);
 
-    // if the points are above 1000 the user will likely have gained some points
-    if (points > 1000) {
-      pointsGained = 100 + (DateTime.now().millisecondsSinceEpoch % 900);
-      pointsLost = points - pointsGained;
+    // 80 % of people are good persons
+    if (DateTime.now().millisecondsSinceEpoch % 10 < 8) {
+      // Generate a random number between 1100 and 1500
+      points = 1100 + (DateTime.now().millisecondsSinceEpoch % 400);
+      pointsGained = points - 1000;
+
+      // A person gets between 20 and 60 points for a good behavior
+      goodBehaviors = pointsGained ~/ 20;
+
+      // No person is perfect so every person has around 1 or 2 violations
+      violations = 1 + (DateTime.now().millisecondsSinceEpoch % 2);
+      pointsLost = violations * 40;
+
+      points -= pointsLost;
     } else {
-      pointsLost = 100 + (DateTime.now().millisecondsSinceEpoch % 900);
-      pointsGained = points + pointsLost;
+      // Generate a random number between 700 and 900
+      points = 700 + (DateTime.now().millisecondsSinceEpoch % 200);
+      pointsLost = 1000 - points;
+
+      // A person loses between 40 and 100 points for a violation
+      violations = pointsLost ~/ 40;
+
+      // Every person has at least 1 good behavior
+      goodBehaviors = 1 + (DateTime.now().millisecondsSinceEpoch % 2);
+      pointsGained = goodBehaviors * 20;
+
+      points += pointsGained;
     }
 
-    // if the points are above 1000 the user will likely has done a good behavior
-    if (points > 1000) {
-      goodBehaviors = 1 + (DateTime.now().millisecondsSinceEpoch % 10).floor();
-      violations = 0;
-    } else {
-      violations = 1 + (DateTime.now().millisecondsSinceEpoch % 10).floor();
-      goodBehaviors = 0;
-    }
+    return points;
+  }
+}
+
+class DataItem extends StatelessWidget {
+  const DataItem(
+      {super.key, required this.title, required this.value, this.textStyle});
+
+  final String title;
+  final int value;
+  final TextStyle? textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '$title: ',
+          style: const TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          value.toString(),
+          style: textStyle ??
+              const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ],
+    );
   }
 }

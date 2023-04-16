@@ -29,9 +29,38 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('Dashboard'),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        DataItem(
+          title: 'Points',
+          value: UserData.generateRandomData(),
+        ),
+
+        // Points Gained in total
+        DataItem(
+          title: 'Points Gained',
+          value: UserData.pointsGained,
+          textStyle: const TextStyle(
+            color: Colors.green,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        DataItem(title: 'Goodbehaviors', value: UserData.goodBehaviors),
+
+        // Points Lost in total
+        DataItem(
+          title: 'Points Lost',
+          value: UserData.pointsLost,
+          textStyle: const TextStyle(
+            color: Colors.red,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        DataItem(title: 'Violations', value: UserData.violations),
       ],
     );
   }
