@@ -45,70 +45,84 @@ class _ListComponentState extends State<ListComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: MaterialButton(
-        onPressed: () {
-          setState(() {
-            if (_pressed) _closing = true;
-            _pressed = !_pressed;
-          });
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: !_pressed ? 45 : 300,
-          onEnd: () {
-            setState(() {
-              _showDetails = !_showDetails;
-              _closing = false;
-            });
-          },
-          margin: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: CustomColors.primary,
-            border: Border.all(
-              color: CustomColors.primary.withOpacity(0.5),
-              width: 2,
+    return Flex(
+      direction: Axis.horizontal,
+      children: [
+        Flexible(
+          child: MaterialButton(
+            onPressed: () {
+              setState(() {
+                if (_pressed) _closing = true;
+                _pressed = !_pressed;
+              });
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              height: !_pressed
+                  ? 45
+                  : // fit the details text no matter the size
+                  45 + (widget.details as Text).data!.length * 0.625,
+              onEnd: () {
+                setState(() {
+                  _showDetails = !_showDetails;
+                  _closing = false;
+                });
+              },
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: CustomColors.primary,
+                border: Border.all(
+                  color: CustomColors.primary.withOpacity(0.5),
+                  width: 2,
+                ),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  widget.header,
+                  if (_showDetails && !_closing) const SizedBox(height: 10),
+                  if (_showDetails && !_closing)
+                    const Divider(color: Colors.white),
+                  if (_showDetails && !_closing) const SizedBox(height: 10),
+                  if (_showDetails && !_closing)
+                    Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            child: widget.details)),
+                  if (widget.checkButton)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              _isCompleted = !_isCompleted;
+                            });
+                          },
+                          child: _isCompleted
+                              ? const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                )
+                              : const Icon(
+                                  Icons.cancel,
+                                  color: Colors.red,
+                                ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
-          child: Column(
-            children: [
-              const SizedBox(height: 10),
-              widget.header,
-              if (_showDetails && !_closing) const SizedBox(height: 10),
-              if (_showDetails && !_closing) const Divider(color: Colors.white),
-              if (_showDetails && !_closing) const SizedBox(height: 10),
-              if (_showDetails && !_closing) Expanded(child: widget.details),
-              if (widget.checkButton)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _isCompleted = !_isCompleted;
-                        });
-                      },
-                      child: _isCompleted
-                          ? const Icon(
-                              Icons.check_circle,
-                              color: Colors.green,
-                            )
-                          : const Icon(
-                              Icons.cancel,
-                              color: Colors.red,
-                            ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
         ),
-      ),
+      ],
     );
   }
 }

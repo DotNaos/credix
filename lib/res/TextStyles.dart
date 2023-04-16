@@ -6,4 +6,11 @@ class TextStyles {
         fontSize: fontSize ?? 20,
         fontWeight: FontWeight.bold,
       );
+
+  static TextStyle details({Color? color, double? fontSize}) => TextStyle(
+        color: color ?? Colors.grey.shade200,
+        fontSize: fontSize ?? 16,
+        fontWeight: FontWeight.normal,
+        height: 1.5,
+      );
 }

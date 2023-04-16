@@ -30,25 +30,27 @@ class ViolationListPage extends StatefulWidget {
 class _ViolationListPageState extends State<ViolationListPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+    return ListView(children: [
+      for (int i = 0; i < 100; i++)
         ListComponent(
           header: HeaderComponent(
             headers: [
               Text(
                   '${DateTime.now().day}:${DateTime.now().month}:${DateTime.now().year}',
                   style: TextStyles.header()),
-              Text('Violation', style: TextStyles.header()),
+              Text('Nummer: ${i + 1}', style: TextStyles.header()),
               Text(
-                '${(10 + (100 - 10) * 0.5).floor()}',
+                '${(i % 2 * 20 + 10 * (i % 3) + 10).floor()}',
                 style: TextStyles.header(color: Colors.red),
               ),
             ],
           ),
-          details: Text('Violation details', style: TextStyles.header()),
-        )
-      ],
-    );
+          details: Text(
+            'Das von Ihnen geleitete chinesische Unternehmen wird beschuldigt, gegen das Arbeitsrecht verstoßen zu haben. Es wird behauptet, dass das Unternehmen eine Reihe von Mitarbeitern ohne ordnungsgemäße Arbeitsverträge beschäftigt hat und diese Mitarbeiter möglicherweise nicht angemessen entlohnt hat. Es besteht auch der Verdacht, dass das Unternehmen seine Mitarbeiter gezwungen hat, unbezahlte Überstunden zu leisten und ihre Arbeit unter gefährlichen Bedingungen auszuführen. Darüber hinaus wird das Unternehmen beschuldigt, in einigen Fällen Kinderarbeit betrieben zu haben.',
+            style: TextStyles.details(),
+            textAlign: TextAlign.start,
+          ),
+        ),
+    ]);
   }
 }
