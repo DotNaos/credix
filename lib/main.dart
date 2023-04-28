@@ -1,5 +1,7 @@
 // ignore_for_file: unused_import
 
+// Reference: https://ub.triviumchina.com/2019/10/long-read-the-apps-of-chinas-social-credit-system/
+
 import 'package:flutter/material.dart';
 import 'package:credix/Pages/homepage.dart';
 import 'package:credix/res/custom_colors.dart';
