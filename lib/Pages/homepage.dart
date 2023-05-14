@@ -2,6 +2,7 @@ import 'package:credix/Pages/settings.dart';
 import 'package:credix/Pages/tasklist.dart';
 import 'package:credix/Pages/verify.dart';
 import 'package:credix/Pages/violations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../Components/account_screen.dart';
@@ -74,10 +75,16 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: isSignedIn
-            ? _widgetOptions.elementAt(_selectedIndex)
-            : const LoginPage(),
-      ),
+          child: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _widgetOptions.elementAt(_selectedIndex);
+          } else {
+            return const LoginPage();
+          }
+        },
+      )),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

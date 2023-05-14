@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -40,7 +41,10 @@ class _AccountScreenState extends State<AccountScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () async {
-                await _googleSignIn.signOut();
+                // Sign out regardless of provider
+                // await _googleSignIn.signOut();
+                await FirebaseAuth.instance.signOut();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text('Sign out'),

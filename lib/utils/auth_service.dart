@@ -4,13 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   // Sign in with email and password
-  Future<UserCredential> signInWithEmailAndPassword(
-      String email, String password) async {
-    // User exists, do something
-    return await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+  void signInWithEmailAndPassword(String email, String password) async {
+    await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
   }
 
   // Sign in with Google
