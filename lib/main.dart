@@ -5,8 +5,11 @@
 import 'package:flutter/material.dart';
 import 'package:credix/Pages/homepage.dart';
 import 'package:credix/res/custom_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -16,24 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'credix',
+      title: 'Credix',
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(
-      //   colorScheme: const ColorScheme(
-      //     brightness: Brightness.dark,
-      //     primary: CustomColors.primary,
-      //     onPrimary: CustomColors.onPrimary,
-      //     secondary: CustomColors.secondary,
-      //     onSecondary: CustomColors.onSecondary,
-      //     error: CustomColors.error,
-      //     onError: CustomColors.onError,
-      //     background: CustomColors.background,
-      //     onBackground: CustomColors.onBackground,
-      //     surface: CustomColors.surface,
-      //     onSurface: CustomColors.onSurface,
-      //   ),
-      // ),
-      theme: ThemeData.dark().copyWith(useMaterial3: true),
+      theme: ThemeData(
+        colorScheme: const ColorScheme.dark(),
+        useMaterial3: true,
+      ),
       home: const HomePage(),
     );
   }

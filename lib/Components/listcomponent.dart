@@ -1,7 +1,6 @@
 import 'package:credix/Components/headercomponent.dart';
 import 'package:flutter/material.dart';
 // import the colors
-import 'package:credix/res/custom_colors.dart';
 
 /// This is the component that will be used in a the lists of the app
 /// so it needs to be generic
@@ -75,9 +74,8 @@ class _ListComponentState extends State<ListComponent> {
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: CustomColors.primary,
                 border: Border.all(
-                  color: CustomColors.primary.withOpacity(0.5),
+                  color: _isCompleted ? Colors.green : Colors.red,
                   width: 2,
                 ),
               ),
