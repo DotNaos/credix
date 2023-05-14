@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:credix/utils/auth_service.dart';
 import 'package:credix/pages/login.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -21,10 +20,10 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _loadUserData() async {
     final user = FirebaseAuth.instance.currentUser!;
-    final userData = await AuthService().getUserData(user.uid);
-    setState(() {
-      _userData = userData;
-    });
+    // final userData = await AuthService().getUserData(user.uid);
+    // setState(() {
+    //   _userData = userData;
+    // });
   }
 
   @override

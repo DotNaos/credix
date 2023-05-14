@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:credix/Pages/homepage.dart';
 import 'package:credix/res/custom_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

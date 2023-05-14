@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:credix/utils/auth_service.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../Components/animated_gradient_button.dart';
 
@@ -16,6 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   late String _email;
   late String _password;
   var _isLoading = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   Widget build(BuildContext context) {
@@ -136,23 +137,13 @@ class _LoginPageState extends State<LoginPage> {
                       // Google sign in button
                       ElevatedButton.icon(
                         onPressed: () async {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          try {
-                            await AuthService().signInWithGoogle();
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Failed to sign in with Google. Please try again.',
-                                ),
-                              ),
-                            );
-                            setState(() {
-                              _isLoading = false;
-                            });
-                          }
+                          _googleSignIn.signIn().then(
+                            (userData) {
+                              String name = userData!.displayName!;
+                              String email = userData.email;
+                              String imageUrl = userData.photoUrl!;
+                            },
+                          );
                         },
                         icon: Image.asset('assets/google_logo.png', height: 24),
                         label: const Text('Sign in with Google'),
