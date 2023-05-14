@@ -25,11 +25,11 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 5),
       vsync: this,
     )..repeat(reverse: true);
-    _animation = Tween<double>(begin: 0.0, end: 1.0)
-        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    _animation = Tween<double>(begin: 0.0, end: 0.75).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOutQuad));
   }
 
   @override
@@ -46,15 +46,17 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
+            // lerp through the list of colors defined in the gradient
+            color: Color.lerp(
+              Color.lerp(
                 widget.gradient.colors[0],
                 widget.gradient.colors[1],
-              ],
-              begin: const Alignment(-1.0, -1.0),
-              end: const Alignment(1.0, 0.0),
-              stops: [_animation.value - 0.2, _animation.value],
+                _animation.value * _animation.value,
+              ),
+              widget.gradient.colors[2],
+              _animation.value * _animation.value,
             ),
+
             borderRadius: BorderRadius.circular(10),
           ),
           child: ElevatedButton(

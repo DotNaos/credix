@@ -81,7 +81,11 @@ class _LoginPageState extends State<LoginPage> {
                 // Sign in button
                 AnimatedGradientButton(
                   gradient: const LinearGradient(
-                    colors: [Colors.blue, Colors.purple],
+                    colors: [
+                      Color.fromARGB(255, 52, 90, 214),
+                      Color.fromARGB(255, 121, 157, 255),
+                      Color.fromARGB(255, 102, 255, 171)
+                    ],
                   ),
                   buttonText: 'Submit',
                   onPressed: () {
