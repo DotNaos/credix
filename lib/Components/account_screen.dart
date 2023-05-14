@@ -1,3 +1,4 @@
+import 'package:credix/Components/animated_gradient_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,8 +15,6 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount? user = _googleSignIn.currentUser;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Account'),
@@ -25,30 +24,38 @@ class _AccountScreenState extends State<AccountScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoUrl ?? ''),
+              backgroundImage: NetworkImage(
+                FirebaseAuth.instance.currentUser!.photoURL!,
+              ),
               radius: 50,
             ),
             const SizedBox(height: 16),
             Text(
-              user?.displayName ?? '',
+              FirebaseAuth.instance.currentUser!.displayName!,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
             Text(
-              user?.email ?? '',
+              FirebaseAuth.instance.currentUser!.email!,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () async {
-                // Sign out regardless of provider
-                // await _googleSignIn.signOut();
-                await FirebaseAuth.instance.signOut();
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
-              },
-              child: const Text('Sign out'),
-            ),
+            AnimatedGradientButton(
+                buttonText: 'Sign out',
+                onPressed: () async {
+                  // Sign out regardless of provider
+                  await _googleSignIn.signOut();
+                  await FirebaseAuth.instance.signOut();
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pop();
+                },
+                gradient: const LinearGradient(
+                  colors: [
+                    Colors.red,
+                    Colors.orange,
+                    Color.fromARGB(255, 59, 255, 147),
+                  ],
+                )),
           ],
         ),
       ),

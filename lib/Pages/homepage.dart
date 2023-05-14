@@ -4,7 +4,6 @@ import 'package:credix/Pages/verify.dart';
 import 'package:credix/Pages/violations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../Components/account_screen.dart';
 import 'bonus_list.dart';
 import 'dashboard.dart';
@@ -46,32 +45,32 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final GoogleSignInAccount? user = GoogleSignIn().currentUser;
-    final bool isSignedIn = user != null;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(_pageTitles.elementAt(_selectedIndex)),
         actions: [
-          if (isSignedIn)
-            IconButton(
-              icon: CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl ?? ''),
-              ),
-              onPressed: () {},
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.account_circle),
-              onPressed: () {
-                // TODO: Implement account screen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AccountScreen()),
-                );
-              },
-            ),
+          IconButton(
+            // if the user is logged in, show the profile icon
+            icon: FirebaseAuth.instance.currentUser != null
+                ?
+                // if the user has a profile picture, show it
+                FirebaseAuth.instance.currentUser!.photoURL != null
+                    ? CircleAvatar(
+                        radius: 15,
+                        backgroundImage: NetworkImage(
+                            FirebaseAuth.instance.currentUser!.photoURL!),
+                        backgroundColor: Colors.white,
+                      )
+                    : const Icon(Icons.account_circle)
+                : const Icon(Icons.login),
+
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AccountScreen()),
+              );
+            },
+          ),
         ],
       ),
       body: Center(
@@ -113,7 +112,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        backgroundColor: Colors.blueGrey[900],
         onTap: _onItemTapped,
       ),
     );
