@@ -12,6 +12,7 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +25,23 @@ class _AccountScreenState extends State<AccountScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(
-                FirebaseAuth.instance.currentUser!.photoURL!,
-              ),
+              backgroundImage: _auth.currentUser!.photoURL != null
+                  ? NetworkImage(_auth.currentUser!.photoURL!)
+                  : null,
               radius: 50,
+              child: _auth.currentUser!.photoURL == null
+                  ? const Icon(Icons.person, size: 50)
+                  : null,
             ),
             const SizedBox(height: 16),
-            Text(
-              FirebaseAuth.instance.currentUser!.displayName!,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            if (_auth.currentUser!.displayName != null)
+              Text(
+                _auth.currentUser!.displayName!,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             const SizedBox(height: 8),
             Text(
-              FirebaseAuth.instance.currentUser!.email!,
+              _auth.currentUser!.email!,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
@@ -45,7 +50,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 onPressed: () async {
                   // Sign out regardless of provider
                   await _googleSignIn.signOut();
-                  await FirebaseAuth.instance.signOut();
+                  await _auth.signOut();
                   // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                 },

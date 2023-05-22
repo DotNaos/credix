@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import '../Components/account_screen.dart';
 import 'bonus_list.dart';
 import 'dashboard.dart';
-import 'login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -74,16 +73,8 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-          child: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _widgetOptions.elementAt(_selectedIndex);
-          } else {
-            return const LoginPage();
-          }
-        },
-      )),
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
