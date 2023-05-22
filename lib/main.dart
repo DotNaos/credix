@@ -3,6 +3,7 @@
 // Reference: https://ub.triviumchina.com/2019/10/long-read-the-apps-of-chinas-social-credit-system/
 
 import 'package:credix/Pages/login.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:credix/Pages/homepage.dart';
 import 'package:credix/res/custom_colors.dart';
@@ -25,6 +26,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   User? _user;
+  ThemeMode themeMode = ThemeMode.system;
+  final Color _colorSchemeSeed = Colors.teal;
 
   @override
   void initState() {
@@ -38,14 +41,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Credix',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: const ColorScheme.dark(),
-        useMaterial3: true,
-      ),
-      home: _user != null ? const HomePage() : const LoginPage(),
-    );
+    return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
+      return MaterialApp(
+        title: 'Credix',
+        themeMode: ThemeMode.dark,
+        theme: ThemeData(
+          colorSchemeSeed: _colorSchemeSeed,
+          useMaterial3: true,
+          brightness: Brightness.light,
+        ),
+        darkTheme: ThemeData(
+          colorSchemeSeed: _colorSchemeSeed,
+          useMaterial3: true,
+          brightness: Brightness.dark,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: _user != null ? const HomePage() : const LoginPage(),
+      );
+    });
   }
 }
