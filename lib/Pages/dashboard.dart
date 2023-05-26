@@ -10,11 +10,14 @@
  * The app has a modern UI and UX design
  */
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 // User Data
 import 'package:credix/utils/user_data.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -29,46 +32,105 @@ class _DashboardPageState extends State<DashboardPage> {
 
   UserData userData = UserData();
 
+  // List of things to show
+  List<String> thingsToShow = [
+    'violations',
+    'good behaviors',
+    'points gained',
+    'points lost',
+    'bonuses'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+
       // Show the points from the user data on firebase
       children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Stack(
-          children: [
-            SvgPicture.asset('assets/Card.svg',
-                width: 300,
-                // Set the HSV values for the background color
-                colorFilter: const ColorFilter.mode(
-                    Color.fromARGB(255, 255, 255, 255), BlendMode.modulate)),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Points",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.normal,
-                      color: Color.fromARGB(255, 255, 255, 255),
-                    ),
-                  ),
-                  Text(
-                    "100",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+        const Expanded(
+          flex: 2,
+          child: Row(
+            // User Profile Picture
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              AccountAvatar(),
+              Text(
+                '1000',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            )
-          ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Expanded(
+          flex: 4,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).hoverColor,
+            ),
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              children: [
+                const Text(
+                  'Statistics',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Divider(
+                  height: 30,
+                ),
+                // Show the statistics from the user data on firebase
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: thingsToShow.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(thingsToShow[index],
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  // Show the text in caps lock
+                                  textBaseline: TextBaseline.alphabetic,
+                                  fontFeatures: [
+                                    FontFeature.enable('smcp'),
+                                  ],
+                                )),
+                            const Text('1000', style: TextStyle(fontSize: 20)),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Show a Image Picker to change the profile picture
+                ElevatedButton(
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    final XFile? image = await picker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (image != null) {
+                      userData.changeProfilePicture(image.path);
+                    }
+                  },
+                  child: const Text('Change Profile Picture'),
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );

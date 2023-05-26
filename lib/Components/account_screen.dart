@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../utils/user_data.dart';
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
 
@@ -24,15 +26,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              backgroundImage: _auth.currentUser!.photoURL != null
-                  ? NetworkImage(_auth.currentUser!.photoURL!)
-                  : null,
-              radius: 50,
-              child: _auth.currentUser!.photoURL == null
-                  ? const Icon(Icons.person, size: 50)
-                  : null,
-            ),
+            const AccountAvatar(),
             const SizedBox(height: 16),
             if (_auth.currentUser!.displayName != null)
               Text(

@@ -20,4 +20,25 @@ class UserData {
     final snapshot = await firestore.collection('users').doc(user!.uid).get();
     return snapshot.data()!;
   }
+
+  void changeProfilePicture(String path) {
+    user!.updatePhotoURL(path);
+  }
+}
+
+class AccountAvatar extends StatelessWidget {
+  const AccountAvatar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundImage: FirebaseAuth.instance.currentUser!.photoURL != null
+          ? NetworkImage(FirebaseAuth.instance.currentUser!.photoURL!)
+          : null,
+      radius: 50,
+      child: FirebaseAuth.instance.currentUser!.photoURL == null
+          ? const Icon(Icons.person, size: 50)
+          : null,
+    );
+  }
 }
