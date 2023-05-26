@@ -43,21 +43,20 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(builder: (lightColorScheme, darkColorScheme) {
       return MaterialApp(
-        title: 'Credix',
-        themeMode: ThemeMode.dark,
-        theme: ThemeData(
-          colorSchemeSeed: _colorSchemeSeed,
-          useMaterial3: true,
-          brightness: Brightness.light,
-        ),
-        darkTheme: ThemeData(
-          colorSchemeSeed: _colorSchemeSeed,
-          useMaterial3: true,
-          brightness: Brightness.dark,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: _user != null ? const HomePage() : const LoginPage(),
-      );
+          title: 'Credix',
+          themeMode: ThemeMode.dark,
+          theme: ThemeData(
+            colorSchemeSeed: _colorSchemeSeed,
+            useMaterial3: true,
+            brightness: Brightness.light,
+          ),
+          darkTheme: ThemeData(
+            colorSchemeSeed: _colorSchemeSeed,
+            useMaterial3: true,
+            brightness: Brightness.dark,
+          ),
+          debugShowCheckedModeBanner: false,
+          home: _user != null ? const HomePage() : const LoginPage());
     });
   }
 }

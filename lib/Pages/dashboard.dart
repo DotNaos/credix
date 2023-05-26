@@ -43,7 +43,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 width: 300,
                 // Set the HSV values for the background color
                 colorFilter: const ColorFilter.mode(
-                    Color.fromARGB(255, 162, 0, 255), BlendMode.modulate)),
+                    Color.fromARGB(255, 255, 255, 255), BlendMode.modulate)),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: const Column(
