@@ -1,5 +1,6 @@
 import 'package:credix/utils/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../Components/animated_gradient_button.dart';
@@ -91,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                           Color.fromARGB(255, 102, 255, 171)
                         ],
                       ),
-                      buttonText: 'Sign In',
+                      buttonText: 'Sign in',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // Show what this returns
@@ -120,29 +121,41 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       },
                     ),
-                    // Sign up button
+                    !kIsWeb
+                        ? Column(
+                            children: [
+                              // Add a horizontal divider
+                              const Divider(
+                                height: 40,
+                                thickness: 0.5,
+                                color: Color.fromARGB(255, 75, 75, 75),
+                              ),
+                              // Google sign in button
+                              ElevatedButton.icon(
+                                onPressed: () async {
+                                  AuthService().signInWithGoogle();
+                                },
+                                icon: Image.asset('assets/google_logo.png',
+                                    height: 24),
+                                label: const Text('Sign in with Google',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    )),
+                                style: ElevatedButton.styleFrom(
+                                  foregroundColor:
+                                      const Color.fromARGB(221, 73, 44, 44),
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(height: 0),
 
-                    // Add a horizontal divider
-                    const Divider(
-                      height: 40,
-                      thickness: 0.5,
-                      color: Color.fromARGB(255, 75, 75, 75),
-                    ),
-                    // Google sign in button
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        AuthService().signInWithGoogle();
-                      },
-                      icon: Image.asset('assets/google_logo.png', height: 24),
-                      label: const Text('Sign in with Google'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: const Color.fromARGB(221, 73, 44, 44),
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
+                    // Sign up button
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

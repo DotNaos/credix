@@ -4,6 +4,7 @@
 
 import 'package:credix/Pages/login.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:credix/Pages/homepage.dart';
 import 'package:credix/res/custom_colors.dart';
@@ -13,13 +14,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-        apiKey: "AIzaSyCyKuJQ9eK2OlCv60aPoYlXD0lX-GcyKfk",
-        appId: "1:198559573731:web:f037ee595aa9868c0d07d6",
-        messagingSenderId: "198559573731",
-        projectId: "credix-be37c"),
-  );
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyCyKuJQ9eK2OlCv60aPoYlXD0lX-GcyKfk",
+          appId: "1:198559573731:web:f037ee595aa9868c0d07d6",
+          messagingSenderId: "198559573731",
+          projectId: "credix-be37c"),
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+
   runApp(const MyApp());
 }
 

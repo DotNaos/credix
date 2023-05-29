@@ -63,13 +63,16 @@ class _AnimatedGradientButtonState extends State<AnimatedGradientButton>
             onPressed: widget.onPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.transparent,
-              elevation: 0,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             child: Text(
               widget.buttonText,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 16,
               ),
             ),
           ),
