@@ -13,7 +13,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+        apiKey: "AIzaSyCyKuJQ9eK2OlCv60aPoYlXD0lX-GcyKfk",
+        appId: "1:198559573731:web:f037ee595aa9868c0d07d6",
+        messagingSenderId: "198559573731",
+        projectId: "credix-be37c"),
+  );
   runApp(const MyApp());
 }
 
