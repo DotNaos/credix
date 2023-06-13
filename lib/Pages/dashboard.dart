@@ -12,6 +12,8 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 // User Data
@@ -115,18 +117,20 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
 
-                // Show a Image Picker to change the profile picture
+                // Show a Button to update the user data
                 ElevatedButton(
                   onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image = await picker.pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (image != null) {
-                      userData.changeProfilePicture(image.path);
-                    }
+                    // Get the user data from firebase from the current user
+
+                    FirebaseFirestore db = FirebaseFirestore.instance;
+
+                    // Get the users points from the database
+                    DocumentSnapshot<Map<String, dynamic>> snapshot =
+                        await db.collection('user').doc('points').get();
+
+                    // Update the user data
                   },
-                  child: const Text('Change Profile Picture'),
+                  child: const Text('Update'),
                 ),
               ],
             ),

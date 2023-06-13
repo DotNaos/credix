@@ -9,6 +9,7 @@ class UserData {
   final User? user = FirebaseAuth.instance.currentUser;
 
   Future<void> addUserData(String name, int age, String email) async {
+    // If the document doesn't exist, it will be created.
     await firestore.collection('users').doc(user!.uid).set({
       'name': name,
       'age': age,
@@ -23,6 +24,15 @@ class UserData {
 
   void changeProfilePicture(String path) {
     user!.updatePhotoURL(path);
+  }
+
+  void addUser() {
+    firestore.collection('users').doc(user!.uid).set({
+      'name': user!.displayName,
+      'email': user!.email,
+      'age': 0,
+      'points': 0,
+    });
   }
 }
 

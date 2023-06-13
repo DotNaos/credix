@@ -9,10 +9,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-// flutter ml vision
 
 class VerifyPage extends StatefulWidget {
-  const VerifyPage({super.key});
+  const VerifyPage({Key? key}) : super(key: key);
 
   @override
   _VerifyPageState createState() => _VerifyPageState();
@@ -28,21 +27,33 @@ class _VerifyPageState extends State<VerifyPage> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
+        _detectFaces();
       }
     });
   }
+
+  Future<void> _detectFaces() async {}
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _image == null ? const Text('No image selected.') : Image.file(_image!),
+      children: <Widget>[
+        if (_image != null)
+          Container(
+            height: 200,
+            width: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: FileImage(_image!),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: const CustomPaint(),
+          ),
         ElevatedButton(
           onPressed: getImage,
-          child: const Text('Take a photo'),
+          child: const Text('Take Photo'),
         ),
       ],
     );
