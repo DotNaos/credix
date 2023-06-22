@@ -1,18 +1,7 @@
 // ignore_for_file: slash_for_doc_comments, unused_import
 
-/**
- * The page is displayed in the body of the app and does not use a scaffold
- * On this page the user can see various statistics about his/her behavior
- * this includes the number of violations, the number of good behaviors,
- * the number of points gained, the number of points lost, the number of bonuses
- * and overall the number of points
- * 
- * The app has a modern UI and UX design
- */
-
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -35,13 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
   UserData userData = UserData();
 
   // List of things to show
-  List<String> thingsToShow = [
-    'violations',
-    'good behaviors',
-    'points gained',
-    'points lost',
-    'bonuses'
-  ];
+  List<String> thingsToShow = UserData().getEntries();
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               AccountAvatar(),
-              Text(
-                '1000',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              ValueFromDatabase(value: "points"),
             ],
           ),
         ),
@@ -91,52 +68,102 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 // Show the statistics from the user data on firebase
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: thingsToShow.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(thingsToShow[index],
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  // Show the text in caps lock
-                                  textBaseline: TextBaseline.alphabetic,
-                                  fontFeatures: [
-                                    FontFeature.enable('smcp'),
-                                  ],
-                                )),
-                            const Text('1000', style: TextStyle(fontSize: 20)),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                  child: ListFromDatabase(values: thingsToShow),
                 ),
 
                 // Show a Button to update the user data
                 ElevatedButton(
-                  onPressed: () async {
-                    // Get the user data from firebase from the current user
-
-                    FirebaseFirestore db = FirebaseFirestore.instance;
-
-                    // Get the users points from the database
-                    DocumentSnapshot<Map<String, dynamic>> snapshot =
-                        await db.collection('user').doc('points').get();
-
-                    // Update the user data
+                  onPressed: () {
+                    userData.addPoints(100);
                   },
-                  child: const Text('Update'),
+                  child: const Text('Add'),
                 ),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+// Widget that shows a value from the database and listens for changes
+// The value is passed as a parameter
+
+class ValueFromDatabase extends StatelessWidget {
+  const ValueFromDatabase({Key? key, required this.value}) : super(key: key);
+
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data[value].toString(),
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
+    );
+  }
+}
+
+// Widget that is a scrollable list of all the data from the database
+// A list of values is passed as a parameter
+
+class ListFromDatabase extends StatelessWidget {
+  const ListFromDatabase({Key? key, required this.values}) : super(key: key);
+
+  final List<String> values;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: values.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    values[index],
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    snapshot.data[values[index]].toString(),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          return const CircularProgressIndicator();
+        }
+      },
     );
   }
 }

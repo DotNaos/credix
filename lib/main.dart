@@ -3,6 +3,7 @@
 // Reference: https://ub.triviumchina.com/2019/10/long-read-the-apps-of-chinas-social-credit-system/
 
 import 'package:credix/Pages/login.dart';
+import 'package:credix/utils/user_data.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((user) {
       setState(() {
+        UserData().addUser();
         _user = user;
       });
     });

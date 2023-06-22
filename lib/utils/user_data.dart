@@ -26,12 +26,34 @@ class UserData {
     user!.updatePhotoURL(path);
   }
 
-  void addUser() {
-    firestore.collection('users').doc(user!.uid).set({
-      'name': user!.displayName,
-      'email': user!.email,
-      'age': 0,
-      'points': 0,
+  Future<void> addUser() async {
+    List<String> entries = getEntries();
+    Map<String, dynamic> userData = {
+      'name': user!.displayName!,
+      'email': user!.email!,
+      for (String entry in entries) entry: 0,
+    };
+    DocumentSnapshot doc =
+        await firestore.collection('users').doc(user!.uid).get();
+    if (doc.exists) {
+      return Future.value();
+    }
+
+    // Do not set if the user already exists
+
+    return firestore
+        .collection('users')
+        .doc(user!.uid)
+        .set(userData, SetOptions(merge: true));
+  }
+
+  List<String> getEntries() {
+    return ['points', 'violations', 'completed tasks', 'failed tasks'];
+  }
+
+  void addPoints(int i) {
+    firestore.collection('users').doc(user!.uid).update({
+      'points': FieldValue.increment(i),
     });
   }
 }

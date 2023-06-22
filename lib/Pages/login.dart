@@ -1,5 +1,4 @@
 import 'package:credix/utils/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -96,10 +95,8 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // Show what this returns
-
-                          Future<UserCredential> userCredential =
-                              FirebaseAuth.instance.signInWithEmailAndPassword(
-                                  email: _email, password: _password);
+                          AuthService()
+                              .signInWithEmailAndPassword(_email, _password);
                         } else {
                           // Show a popup
                           showDialog(
