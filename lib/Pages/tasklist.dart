@@ -13,24 +13,34 @@
 
 import 'dart:math';
 
+import 'package:credix/utils/user_data.dart';
 import 'package:flutter/material.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({super.key});
+  TaskListPage({super.key});
+
+  List<int> completedTasks = [];
+  List<int> add(int index) {
+    completedTasks.add(index);
+    return completedTasks;
+  }
 
   @override
   _TaskListPageState createState() => _TaskListPageState();
 }
 
 class _TaskListPageState extends State<TaskListPage> {
+  var completedCount = UserData().valueFromDatabase('completedTasks');
+
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
       // All completed tasks will be shown at the bottom of the list
       for (int i = 0; i < 100; i++)
-        const TaskListItem(
-          key: Key('TaskListItem'),
-        ),
+        if (!widget.completedTasks.contains(i))
+          const TaskListItem(
+            key: Key('TaskListItem'),
+          ),
     ]);
   }
 }
@@ -77,7 +87,16 @@ class _TaskListItemState extends State<TaskListItem> {
         ),
         onTap: () {
           setState(() {
-            isCompleted = !isCompleted;
+            if (!isCompleted) {
+              isCompleted = true;
+              UserData().addOnto('completed tasks');
+              // Add points to user's points
+              int points = Random().nextInt(80);
+              UserData().addPoints(points + 20);
+
+              // Add to completed tasks list
+              TaskListPage().add(randomIndex);
+            }
           });
         },
       ),

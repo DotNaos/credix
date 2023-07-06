@@ -70,14 +70,6 @@ class _DashboardPageState extends State<DashboardPage> {
                 Expanded(
                   child: ListFromDatabase(values: thingsToShow),
                 ),
-
-                // Show a Button to update the user data
-                ElevatedButton(
-                  onPressed: () {
-                    userData.addPoints(100);
-                  },
-                  child: const Text('Add'),
-                ),
               ],
             ),
           ),
@@ -98,16 +90,13 @@ class ValueFromDatabase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .snapshots(),
+      stream: UserData().getStream(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return Text(
             snapshot.data[value].toString(),
             style: const TextStyle(
-              fontSize: 30,
+              fontSize: 50,
               fontWeight: FontWeight.bold,
             ),
           );
@@ -130,33 +119,33 @@ class ListFromDatabase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .snapshots(),
+      stream: UserData().getStream(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: values.length,
             itemBuilder: (BuildContext context, int index) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    values[index],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      values[index],
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    snapshot.data[values[index]].toString(),
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      snapshot.data[values[index]].toString(),
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           );

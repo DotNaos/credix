@@ -1,4 +1,3 @@
-import 'package:credix/Components/headercomponent.dart';
 import 'package:flutter/material.dart';
 // import the colors
 
@@ -23,104 +22,211 @@ import 'package:flutter/material.dart';
 class ListComponent extends StatefulWidget {
   const ListComponent({
     Key? key,
-    required this.header,
+    required this.date,
+    required this.pointsCount,
     required this.details,
-    this.checkButton = false,
   }) : super(key: key);
 
-  final HeaderComponent header;
-  final Widget details;
-  final bool checkButton;
+  final String date;
+  final int pointsCount;
+  final String details;
 
   @override
   _ListComponentState createState() => _ListComponentState();
 }
 
 class _ListComponentState extends State<ListComponent> {
-  bool _showDetails = false;
-  bool _isCompleted = false;
-  bool _pressed = false;
-  bool _closing = false;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskDetailsPage(
+              date: widget.date,
+              details: widget.details,
+              points: widget.pointsCount,
+            ),
+          ),
+        );
+      },
+      child: Container(
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 43, 46, 54),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(0, 0, 0, 0.473),
+                blurRadius: 5,
+                spreadRadius: 0.1,
+                offset: Offset(0, 0),
+                blurStyle: BlurStyle.normal,
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.warning,
+                    color: Colors.red,
+                    size: 30,
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    widget.date,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '-${widget.pointsCount}',
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+}
+
+class TaskDetailsPage extends StatelessWidget {
+  const TaskDetailsPage(
+      {super.key,
+      required this.date,
+      required this.details,
+      required this.points});
+
+  final String date;
+  final String details;
+  final int points;
 
   @override
   Widget build(BuildContext context) {
-    return Flex(
-      direction: Axis.horizontal,
-      children: [
-        Flexible(
-          child: MaterialButton(
-            onPressed: () {
-              setState(() {
-                if (_pressed) _closing = true;
-                _pressed = !_pressed;
-              });
-            },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              height: !_pressed
-                  ? 45
-                  : // fit the details text no matter the size
-                  45 + (widget.details as Text).data!.length * 0.625,
-              onEnd: () {
-                setState(() {
-                  _showDetails = !_showDetails;
-                  _closing = false;
-                });
-              },
-              margin: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Details for $date'),
+        backgroundColor: const Color.fromARGB(255, 7, 7, 7),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: _isCompleted ? Colors.green : Colors.red,
-                  width: 2,
+                  color: const Color.fromARGB(255, 43, 46, 54),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.473),
+                      blurRadius: 5,
+                      spreadRadius: 0.1,
+                      offset: Offset(0, 0),
+                      blurStyle: BlurStyle.normal,
+                    ),
+                  ]),
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'On ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: date,
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: '\nyou were reported',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Column(
+            ),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                details,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 43, 46, 54),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.473),
+                    blurRadius: 5,
+                    spreadRadius: 0.1,
+                    offset: Offset(0, 0),
+                    blurStyle: BlurStyle.normal,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(height: 10),
-                  widget.header,
-                  if (_showDetails && !_closing) const SizedBox(height: 10),
-                  if (_showDetails && !_closing)
-                    const Divider(color: Colors.white),
-                  if (_showDetails && !_closing) const SizedBox(height: 10),
-                  if (_showDetails && !_closing)
-                    Expanded(
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 0),
-                            child: widget.details)),
-                  if (widget.checkButton)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _isCompleted = !_isCompleted;
-                            });
-                          },
-                          child: _isCompleted
-                              ? const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                )
-                              : const Icon(
-                                  Icons.cancel,
-                                  color: Colors.red,
-                                ),
-                        ),
-                      ],
+                  const Text(
+                    'Points',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  Text(
+                    '-$points',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -1,13 +1,13 @@
 import 'package:credix/Pages/settings.dart';
 import 'package:credix/Pages/tasklist.dart';
-import 'package:credix/Pages/verify.dart';
+import 'package:credix/Pages/report.dart';
 import 'package:credix/Pages/violations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Components/account_screen.dart';
+import '../utils/user_data.dart';
 import 'bonus_list.dart';
 import 'dashboard.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,13 +17,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const List<Widget> _widgetOptions = <Widget>[
-    DashboardPage(),
-    BonusListPage(),
-    ViolationListPage(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const DashboardPage(),
+    const BonusListPage(),
+    const ViolationListPage(),
     TaskListPage(),
-    VerifyPage(),
-    SettingsPage(),
+    const ReportPage(),
+    const SettingsPage(),
   ];
 
   static const List<String> _pageTitles = <String>[
@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     'Bonuses',
     'Violations',
     'Tasks',
-    'Verify',
+    'Report',
     'Settings',
   ];
 
@@ -45,6 +45,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // Add the user to the database if they are not already there
+    UserData().addUser();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_pageTitles.elementAt(_selectedIndex)),
@@ -96,7 +99,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.verified_user),
-            label: 'Verify',
+            label: 'Report',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

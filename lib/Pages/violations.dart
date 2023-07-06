@@ -15,10 +15,11 @@
  * 
  */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:credix/components/listcomponent.dart';
-import 'package:credix/Components/headercomponent.dart';
-import 'package:credix/res/TextStyles.dart';
+
+import '../Components/listcomponent.dart';
 
 class ViolationListPage extends StatefulWidget {
   const ViolationListPage({super.key});
@@ -31,26 +32,29 @@ class _ViolationListPageState extends State<ViolationListPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
-      for (int i = 0; i < 100; i++)
-        ListComponent(
-          header: HeaderComponent(
-            headers: [
-              Text(
-                  '${DateTime.now().day}:${DateTime.now().month}:${DateTime.now().year}',
-                  style: TextStyles.header()),
-              Text('Nummer: ${i + 1}', style: TextStyles.header()),
-              Text(
-                '${(i % 2 * 20 + 10 * (i % 3) + 10).floor()}',
-                style: TextStyles.header(color: Colors.red),
-              ),
-            ],
-          ),
-          details: Text(
-            'Das von Ihnen geleitete chinesische Unternehmen wird beschuldigt, gegen das Arbeitsrecht verstoßen zu haben. Es wird behauptet, dass das Unternehmen eine Reihe von Mitarbeitern ohne ordnungsgemäße Arbeitsverträge beschäftigt hat und diese Mitarbeiter möglicherweise nicht angemessen entlohnt hat. Es besteht auch der Verdacht, dass das Unternehmen seine Mitarbeiter gezwungen hat, unbezahlte Überstunden zu leisten und ihre Arbeit unter gefährlichen Bedingungen auszuführen. Darüber hinaus wird das Unternehmen beschuldigt, in einigen Fällen Kinderarbeit betrieben zu haben.',
-            style: TextStyles.details(),
-            textAlign: TextAlign.start,
-          ),
-        ),
+      StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection('violations')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Column(
+              children: [
+                for (int i = 0; i < snapshot.data!.docs.length; i++)
+                  ListComponent(
+                    date: snapshot.data!.docs[i]['date'],
+                    pointsCount: snapshot.data!.docs[i]['pointsCost'],
+                    details: snapshot.data!.docs[i]['description'].toString(),
+                  ),
+              ],
+            );
+          }),
     ]);
   }
 }
