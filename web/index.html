@@ -62,8 +62,11 @@
     measurementId: "G-F1XCPQCJ5G"
   };
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+  // Do not reinitialize the app if it already exists
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+
+  const app = firebase.app();
   const analytics = getAnalytics(app);
 </script>
 
